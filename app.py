@@ -1,10 +1,13 @@
 #-*- encoding: utf-8 -*-
 
 import os
-from flask import Flask, session, request, json, g
+from flask import Flask, session, request, json, g, redirect
 from flask import url_for
 from flask import render_template
+from bson.objectid import ObjectId
+
 from db import init_app, get_table
+
 from datetime import datetime
 
 
@@ -41,11 +44,17 @@ def create_app(test_config=None):
 	@app.route('/footopia',methods=['GET','POST'])
 	def footopia():
 		
+		def toString(d):
+			for i in d.keys():
+				if type(d[i]) == bytes:
+					d[i] = d[i].decode('utf-8').replace('\n','').replace('\r','')
+			return d
+
 		db = get_table('messages')
 		messages = []
 		if db.count({}) != 0:
-			messages = [i for i in db.find()]
-			print(messages[0])
+			messages = [toString(i) for i in db.find()]
+			print(messages[-1])
 		if request.method == 'POST':
 			data = request.values
 			if g.user:
@@ -58,12 +67,12 @@ def create_app(test_config=None):
 							'lng': geo['lng'], 'message': message, 
 							'timestamp': datetime.utcnow().strftime('%y-%m-%d %H:%M')})
 
-		return render_template('footopia.html', messages=messages)
+		return render_template('footopia.html', messages=messages[::-1])
 
 	@app.route('/postmethod', methods=['POST'])
 	def get_js_geolocation():
 		session['geolocation'] = json.loads(request.data.decode())
-		return redirect(url_for('/footopia'))
+		return redirect(url_for('footopia'))
 
 	import auth
 	app.register_blueprint(auth.bp)
