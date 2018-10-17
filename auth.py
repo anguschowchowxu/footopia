@@ -20,7 +20,7 @@ def login():
 	if request.method == 'POST':
 		username = request.form['username']
 		password = request.form['password']
-		db = database.get_db()
+		db = database.get_table()
 		error = None
 		user = db.find_one({'username': username})
 
@@ -45,7 +45,7 @@ def register():
 	if request.method == 'POST':
 		username = request.form['username']
 		password = request.form['password']
-		db = database.get_db()
+		db = database.get_table()
 		error = None
 
 		if not username:
@@ -70,7 +70,7 @@ def load_logged_in_user():
 	if user_id is None:
 		g.user = None
 	else:
-		g.user = database.get_db().find_one({'_id': ObjectId(user_id)})['username']
+		g.user = database.get_table().find_one({'_id': ObjectId(user_id)})['username']
 		
 @bp.route('/logout')
 def logout():

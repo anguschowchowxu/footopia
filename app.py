@@ -1,10 +1,12 @@
 #-*- encoding: utf-8 -*-
 
 import os
-from flask import Flask
+from flask import Flask, session, request, json, g
 from flask import url_for
 from flask import render_template
-from db import init_db
+from db import init_app, get_table
+from datetime import datetime
+
 
 def create_app(test_config=None):
 	# create and configure the app
@@ -36,10 +38,37 @@ def create_app(test_config=None):
 	def index():
 		return render_template('index.html')
 
+	@app.route('/footopia',methods=['GET','POST'])
+	def footopia():
+		
+		db = get_table('messages')
+		messages = []
+		if db.count({}) != 0:
+			messages = [i for i in db.find()]
+			print(messages[0])
+		if request.method == 'POST':
+			data = request.values
+			if g.user:
+				username =  g.user
+			else:
+				username = 'anonymous'
+			message = data['message'].encode('utf-8')
+			geo = session['geolocation']
+			db.insert_one({'username': username, 'lat': geo['lat'], 
+							'lng': geo['lng'], 'message': message, 
+							'timestamp': datetime.utcnow().strftime('%y-%m-%d %H:%M')})
+
+		return render_template('footopia.html', messages=messages)
+
+	@app.route('/postmethod', methods=['POST'])
+	def get_js_geolocation():
+		session['geolocation'] = json.loads(request.data.decode())
+		return redirect(url_for('/footopia'))
+
 	import auth
 	app.register_blueprint(auth.bp)
 
-	# init_db(app)  # ? 
+	init_app(app)
 
 	return app
 
