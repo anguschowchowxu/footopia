@@ -1,11 +1,11 @@
 #!/bin/bash
 
-cd /home/ec2-user/footopia
+HOMEDIR="/home/ec2-user/footopia"
 
-if [-d "instance/log"]
+if [-d "( $HOMEDIR )instance/log"]
 then
-	mkdir -p instance/log 
+	mkdir -p ( $HOMEDIR )instance/log 
 fi
 
 source env/bin/activate
-python app.py &> instance/log/footopia-$(date +%y-%m-%d).log
+python app.py &> /home/instance/log/footopia-$(date +%y-%m-%d).log
