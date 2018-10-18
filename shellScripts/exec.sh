@@ -2,7 +2,7 @@
 
 BASEDIR="/home/ec2-user/footopia"
 
-if [-d "$HOMEDIR/instance/log"]
+if [ ! -d "${HOMEDIR}/instance/log" ]
 then
 	mkdir -p ${BASEDIR}/instance/log 
 fi
