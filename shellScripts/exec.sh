@@ -8,4 +8,4 @@ then
 fi
 
 source ${BASEDIR}/env/bin/activate
-python app.py &> ${BASEDIR}/instance/log/footopia-$(date +%y-%m-%d).log
+python ${BASEDIR}/app.py &> ${BASEDIR}/instance/log/footopia-$(date +%y-%m-%d).log
