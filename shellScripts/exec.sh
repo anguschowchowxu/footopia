@@ -7,5 +7,5 @@ then
 	mkdir -p ${BASEDIR}/instance/log 
 fi
 
-source env/bin/activate
+source ${BASEDIR}/env/bin/activate
 python app.py &> ${BASEDIR}/instance/log/footopia-$(date +%y-%m-%d).log
