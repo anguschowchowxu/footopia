@@ -2,9 +2,9 @@
 
 HOMEDIR="/home/ec2-user/footopia"
 
-if [-d "( $HOMEDIR )instance/log"]
+if [-d "$HOMEDIR/instance/log"]
 then
-	mkdir -p ( $HOMEDIR )instance/log 
+	mkdir -p ${HOMEDIR}/instance/log 
 fi
 
 source env/bin/activate
