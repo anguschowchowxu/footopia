@@ -9,7 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from bson.objectid import ObjectId
 
-from Hackthon import db as database
+import db as database
 
 
 bp = Blueprint('auth', __name__)  # , url_prefix='/auth'

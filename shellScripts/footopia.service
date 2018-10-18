@@ -1,0 +1,11 @@
+# shoould locate at /etc/systemd/system
+[Unit]
+Description=Social share tool with Flask webframe daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/ec2-user/footopia/shellScripts/exec.sh
+
+[Install]
+WantedBy=multi-user.target
