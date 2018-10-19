@@ -43,6 +43,8 @@ def create_app(test_config=None):
 
 	@app.route('/footopia',methods=['GET','POST'])
 	def footopia():
+		if not hasattr(session, 'user_id'):
+			return redirect(url_for('auth.login'))
 		
 		def toString(d):
 			for i in d.keys():
@@ -51,10 +53,7 @@ def create_app(test_config=None):
 			return d
 
 		db = get_table('messages')
-		messages = []
-		if db.count({}) != 0:
-			messages = [toString(i) for i in db.find()]
-			print(messages[-1])
+
 		if request.method == 'POST':
 			data = request.values
 			if g.user:
@@ -66,6 +65,11 @@ def create_app(test_config=None):
 			db.insert_one({'username': username, 'lat': geo['lat'], 
 							'lng': geo['lng'], 'message': message, 
 							'timestamp': datetime.utcnow().strftime('%y-%m-%d %H:%M')})
+
+		messages = []
+		if db.count({}) != 0:
+			messages = [toString(i) for i in db.find()]
+			print(messages[-1])
 
 		return render_template('footopia.html', messages=messages[::-1])
 
