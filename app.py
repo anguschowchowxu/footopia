@@ -43,7 +43,7 @@ def create_app(test_config=None):
 
 	@app.route('/footopia',methods=['GET','POST'])
 	def footopia():
-		if not hasattr(session, 'user_id'):
+		if not g.user:
 			return redirect(url_for('auth.login'))
 		
 		def toString(d):
