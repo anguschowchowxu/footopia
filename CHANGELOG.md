@@ -12,4 +12,7 @@ Added
 
 ## [TODO]
 
+- better ui of submit form
+- function of one tap help
+- function of verified geolocation
 - installation guide of virtualenv and mongodb-org-3.6

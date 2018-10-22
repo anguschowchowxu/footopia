@@ -71,7 +71,7 @@ def create_app(test_config=None):
 			messages = [toString(i) for i in db.find()]
 			print(messages[-1])
 
-		return render_template('footopia.html', messages=messages[::-1])
+		return render_template('footopia.html', messages=messages[::-1], username=g.user)
 
 	@app.route('/postmethod', methods=['POST'])
 	def get_js_geolocation():

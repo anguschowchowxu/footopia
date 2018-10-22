@@ -4,8 +4,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
 	<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/> 
-	<link rel="stylesheet" href="../static/footopia.css" />
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="../static/footopia.css" />2
 
 {% endblock %}
 
@@ -22,7 +21,8 @@
 			<div id='{{ message._id }}'>
 				<b style='font-size:1.5em'>{{ message.username }}</b>
 				&nbsp;&nbsp;&nbsp;&nbsp;created at
-				<time>{{ message.timestamp }}</time>
+				<time>{{ message.timestamp }}</time> 
+				@({{ message.lng }},{{ message.lat}})
 				<blockquote style='background-color:#FAEBD7'>{{ message.message }}</blockquote><br>
 		{% endfor %}
 	</div>
@@ -31,7 +31,7 @@
 		<b>message:</b>
 		<textarea name='message' rows="1" cols="10" placeholder="leave your message here"></textarea><br>
 		<b>upload pictures:</b>
-		<input type="file" name="image" multiple="multiple">
+		<input id="input-b2" name="image" type="file" class="file" data-show-preview="false">
 		<input type='submit' value='Submit'>
 	</form>	
 	<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.10&key=00388081ed16cfc65cc27cbe24c40064"></script>
@@ -40,6 +40,14 @@
 			// zoom:14,//级别
 			resizeEnable: true
 		});
+
+		map.on('click', function(e){
+			console.log(e.lnglat);
+            new AMap.InfoWindow({
+                content: "<b>Leave your message here:</b><br/><form method='POST' enctype='multipart/form-data'><textarea name='message' rows='1'cols='20' placeholder='leave your message here'></textarea></br/><b>upload pictures:</b><input id='input-b2' name='image' type='file' class='file' data-show-preview='false'><input type='submit' value='Submit'></form>"
+            }).open(map,e.lnglat)
+            clickFunction(e);
+        });
 
 		function clickFunction(e){
 			$.ajax({
@@ -50,14 +58,6 @@
 					data: JSON.stringify(e.lnglat)
 			});
 		};
-
-		map.on('click', function(e){
-			console.log(e.lnglat);
-            new AMap.InfoWindow({
-                content: "<b>Leave your message here:</b><br/><form method='POST' enctype='multipart/form-data'><textarea name='message' rows='1'cols='20' placeholder='leave your message here'></textarea></br/><b>upload pictures:</b><input type='file' name='image' multiple='multiple'><input type='submit' value='Submit'></form>"
-            }).open(map,e.lnglat)
-            clickFunction(e);
-        });
 
 		//添加marker标记
 		function addMarker(lng, lat, infoWindow) {
@@ -97,7 +97,7 @@
 		    var middle = document.createElement("div");
 		    middle.className = "info-middle";
 		    middle.style.backgroundColor = 'white';
-		    middle.innerHTML = content+"<br/><form method='POST' enctype='multipart/form-data'><textarea name='message' rows='1'cols='20' placeholder='leave your message here'></textarea></br/><b>upload pictures:</b><input type='file' name='image' multiple='multiple'><input type='submit' value='Submit'></form>";
+		    middle.innerHTML = content+"<br/><form method='POST' enctype='multipart/form-data'><textarea name='message' rows='1'cols='20' placeholder='leave your message here'></textarea></br/><b>upload pictures:</b><input id='input-b2' name='image' type='file' class='file' data-show-preview='false'><input type='submit' value='Submit'></form>";
 		    info.appendChild(middle);
 
 		    // 定义底部内容
@@ -173,21 +173,6 @@
 			// document.getElementById('status').innerHTML='定位失败'
 			// document.getElementById('result').innerHTML = '失败原因排查信息:'+data.message;
 		}
-
-		map.on('click', function(ev) {
-		  // 触发事件的对象
-		  var target = ev.target;
-		  
-		  // 触发事件的地理坐标，AMap.LngLat 类型
-		  var lnglat = ev.lnglat;
-		  
-		  // 触发事件的像素坐标，AMap.Pixel 类型
-		  var pixel = ev.pixel;
-		  
-		  // 触发事件类型
-		  var type = ev.type;
-
-		});
 
 	</script> 
 {% endblock %}

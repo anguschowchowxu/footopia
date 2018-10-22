@@ -34,7 +34,7 @@ def login():
 			session.clear()
 			print(type(user['_id']))
 			session['user_id'] = str(user['_id'])
-			return redirect(url_for('index'))
+			return redirect(url_for('footopia'))
 
 		flash(error)
 
